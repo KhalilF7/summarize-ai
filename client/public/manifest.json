@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "AI Summarize",
+  "description": "allowing users to highlight text and receive AI-generated summaries",
+  "version": "1.0.0",
+  "action": {
+      "default_popup": "index.html",
+      "default_title": "Open the popup"
+  },
+  "icons": {
+      "16": "/img/favicon/favicon-16x16.png",
+      "48": "/img/favicon/favicon-48x48.png",
+      "128": "/img/favicon/favicon-128x128.png"
+  },
+  "permissions": [
+      "scripting",
+      "activeTab",
+      "storage"
+  ],
+  "host_permissions": [
+      "https://*/"
+  ]
+}

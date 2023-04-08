@@ -40,7 +40,7 @@ function Summary() {
   return (
     <div className="summary-form">
       <div style={{ marginTop: '10px', textAlign: 'center' }}>
-        <Link to="/mysummuries" style={{ textDecoration: 'underline' }}>My Summaries</Link>
+        <Link to="/mysummaries" style={{ textDecoration: 'underline' }}>My Summaries</Link>
       </div>
       <form onSubmit={handleSubmit}>
         <div className="summary-text">

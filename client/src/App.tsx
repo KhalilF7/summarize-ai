@@ -10,7 +10,7 @@ import SummaryList from './views/SummaryList';
 
 const App = () => (
   <BrowserRouter>
-    <Container maxWidth="xl">
+    <Container maxWidth="xs">
       <Routes>
         <Route path="/" element={<Summary />} />
         <Route path="/mysummaries" element={<SummaryList />} />

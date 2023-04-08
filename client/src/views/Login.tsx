@@ -27,7 +27,7 @@ function Login() {
       });
 
       setRedirect(true);
-      console.log(response.data.token); // store the token in local storage or state
+      localStorage.setItem('token', response.data.token); // store the token in local storage or state
     } catch (error) {
       console.log(error);
     }

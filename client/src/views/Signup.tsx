@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import './style.css';
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -60,7 +61,11 @@ const Signup = () => {
             className="form-control"
           />
         </div>
-        <button type="submit" className="btn btn-primary">Signup</button>
+        <button type="submit" className="btn btn-primary">Sign Up</button>
+      <div style={{ marginTop: '10px', textAlign: 'center' }}>
+        <span>Already have an account? </span>
+        <Link to="/login" style={{ textDecoration: 'underline' }}>Login</Link>
+      </div>
       </form>
     </div>
   );

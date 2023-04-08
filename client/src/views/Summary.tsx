@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import './style.css';
+import { Link } from 'react-router-dom';
 
 function Summary() {
   const [text, setText] = useState('');
@@ -38,6 +39,9 @@ function Summary() {
 
   return (
     <div className="summary-form">
+      <div style={{ marginTop: '10px', textAlign: 'center' }}>
+        <Link to="/mysummuries" style={{ textDecoration: 'underline' }}>My Summaries</Link>
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="summary-text">
           <label htmlFor="text">Text:</label>

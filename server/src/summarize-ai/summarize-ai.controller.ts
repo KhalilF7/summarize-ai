@@ -3,6 +3,7 @@ import { SummarizeAiService } from './summarize-ai.service';
 import { GetAiModelSummary } from './model/get-ai-model-summary';
 import { SetSelectedModel } from './model/set-selected-model';
 import { AuthGuard } from '@nestjs/passport';
+import { Summary } from './schemas/summary.schema';
 
 @Controller('summarize-ai')
 @UseGuards(AuthGuard())
@@ -26,5 +27,11 @@ export class SummarizeAiController {
     @UsePipes(ValidationPipe)
     setModel(@Body() data: SetSelectedModel) {
         this.service.setModelId(data.modelId)
+    }
+
+    @Get("/summaries")
+    async listSummaries(@Req() req): Promise<Summary[]> {
+        const userId = req.user._id;
+        return this.service.listSummaries(userId);
     }
 }

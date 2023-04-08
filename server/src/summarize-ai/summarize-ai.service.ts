@@ -82,4 +82,8 @@ export class SummarizeAiService {
             console.log(error);
         }
     }
+
+    async listSummaries(userId: string): Promise<Summary[]> {
+        return this.summaryModel.find({ user: userId }).exec();
+      }
 }

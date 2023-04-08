@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 import './style.css';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [redirect, setRedirect] = useState(false);
 
   const handleEmailChange = (e: any) => {
     setEmail(e.target.value);
@@ -20,16 +21,22 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/auth/login', {
+      const response = await axios.post('http://localhost:8000/auth/login', {
         email,
         password,
       });
+
+      setRedirect(true);
       console.log(response.data.token); // store the token in local storage or state
     } catch (error) {
       console.log(error);
     }
   };
+  
 
+  if(redirect){
+    return <Navigate replace to="/" />
+  }
   return (
     <div  className="centered">
     <form onSubmit={handleSubmit} className="login-form">

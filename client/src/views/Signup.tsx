@@ -2,28 +2,34 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import './style.css';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 const Signup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [redirect, setRedirect] = useState(false);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('/auth/signup', {
+      const response = await axios.post('http://localhost:8000/auth/signup', {
         name,
         email,
         password,
       });
 
+      setRedirect(true);
       console.log(response.data);
     } catch (error) {
       console.error(error);
     }
   };
+
+  if(redirect){
+    return <Navigate replace to="/login" />
+  }
 
   return (
     <div className="centered">

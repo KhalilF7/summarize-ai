@@ -24,9 +24,6 @@ export class SummarizeAiService {
             apiKey: process.env.OPENAI_API_KEY,
         });
 
-        console.log('Organization:', configuration.organization);
-        console.log('API Key:', configuration.apiKey);
-
         this.openAiApi = new OpenAIApi(configuration);
     }
 

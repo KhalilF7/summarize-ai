@@ -19,8 +19,8 @@ function LogoutButton() {
     );
   }
 
-function SummaryList() {
-  const [summaries, setSummaries] = useState([{ text: '', summary: '', _id: '' }]);
+function HighlightList() {
+  const [highlights, setHighlights] = useState([{ text: '', summary: '', _id: '' }]);
 
   useEffect(() => {
     async function fetchData() {
@@ -30,7 +30,7 @@ function SummaryList() {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      setSummaries(response.data);
+      setHighlights(response.data);
       console.log(response.data);
     }
     fetchData();
@@ -39,28 +39,28 @@ function SummaryList() {
   return (
     <div>
         <div className="header">
-            <h2 className="title">My Summaries</h2>
+            <h2 className="title">My Highlights</h2>
             <LogoutButton />
         </div>
-        {summaries.length ? (<table>
+        {highlights.length ? (<table>
         <thead>
             <tr>
-            <th>Text</th>
+            <th>Highlight</th>
             <th>Summary</th>
             </tr>
         </thead>
         <tbody>
-            {summaries.map((summary) => (
+            {highlights.map((summary) => (
             <tr key={summary._id}>
                 <td>{summary.text}</td>
                 <td>{summary.summary}</td>
             </tr>
             ))}
         </tbody>
-        </table>) : (<h2>You don't have any summaries yet</h2>)}
+        </table>) : (<h2>You don't have any highlights yet</h2>)}
     </div>
     
   );
 }
 
-export default SummaryList;
+export default HighlightList;

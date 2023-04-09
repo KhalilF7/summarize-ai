@@ -5,25 +5,38 @@ import { AiOutlinePoweroff } from 'react-icons/ai';
 import './style.css';
 import ExportButton from './ExportButton';
 
+/**
+ * Logout button component
+ */
 function LogoutButton() {
-    const navigate = useNavigate();
-    const handleLogout = () => {
-      localStorage.removeItem('token');
-      navigate('/login');
-      window.location.reload();
-    };
-  
-    return (
-      <button onClick={handleLogout} className="logout-btn">
-        <AiOutlinePoweroff />
-      </button>
-    );
-  }
+  const navigate = useNavigate();
 
+  /**
+   * Function to handle the logout action
+   */
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+    window.location.reload();
+  };
+  
+  return (
+    <button onClick={handleLogout} className="logout-btn">
+      <AiOutlinePoweroff />
+    </button>
+  );
+}
+
+/**
+ * Component to display the list of highlights
+ */
 function HighlightList() {
   const [highlights, setHighlights] = useState([{ text: '', summary: '', _id: '' }]);
   const [isEnabled, setIsEnabled] = useState(true);
 
+  /**
+   * Function to toggle the button state
+   */
   const handleClick = () => {
     setIsEnabled(!isEnabled);
   };
@@ -37,6 +50,10 @@ function HighlightList() {
     cursor: 'pointer',
   };
 
+  /**
+   * Function to handle the export action
+   * @param type - type of export file (pdf/csv)
+   */
   const handleExport = async (type: string) => {
     // Call the export API endpoint here
     const response = await axios.get(`http://localhost:8000/summarize-ai/export-${type}`,
@@ -55,8 +72,10 @@ function HighlightList() {
     document.body.appendChild(link);
     link.click();
   };
-  
 
+  /**
+   * Fetch the list of highlights from the server
+   */
   useEffect(() => {
     async function fetchData() {
       const response = await axios.get('http://localhost:8000/summarize-ai/summaries',
@@ -66,41 +85,43 @@ function HighlightList() {
         },
       });
       setHighlights(response.data);
-      console.log(response.data);
     }
     fetchData();
   }, []);
 
   return (
     <div>
-        <div className="header">
+      <div className="header">
         <button style={buttonStyle} onClick={handleClick}>
           {isEnabled ? 'Enable' : 'Disable'}
         </button>
-            <ExportButton onExport={handleExport} />
-            <LogoutButton />
-        </div>
-        <div className="header">
-            <h2 className="title">My Highlights</h2>
-        </div>
-        {highlights.length ? (<table>
-        <thead>
+        <ExportButton onExport={handleExport} />
+        <LogoutButton />
+      </div>
+      <div className="header">
+        <h2 className="title">My Highlights</h2>
+      </div>
+      {highlights.length ? (
+        <table>
+          <thead>
             <tr>
-            <th>Highlight</th>
-            <th>Summary</th>
+              <th>Highlight</th>
+              <th>Summary</th>
             </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
             {highlights.map((summary) => (
-            <tr key={summary._id}>
+              <tr key={summary._id}>
                 <td>{summary.text}</td>
                 <td>{summary.summary}</td>
-            </tr>
+              </tr>
             ))}
-        </tbody>
-        </table>) : (<h2>You don't have any highlights yet</h2>)}
+          </tbody>
+        </table>
+      ) : (
+        <h2>You don't have any highlights yet</h2>
+      )}
     </div>
-    
   );
 }  
 

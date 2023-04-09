@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 interface TooltipProps {
-  text: string;
-  children?: React.ReactNode;
+  text: string; // The text to be displayed as a tooltip
+  children?: React.ReactNode; // Optional children elements that will be wrapped by the tooltip
 }
 
+// Component that displays a tooltip with a summary of selected text
 const SummaryTooltip: React.FC<TooltipProps> = ({ text, children }) => {
-  const [summary, setSummary] = useState('');
+  const [summary, setSummary] = useState<string>(''); // State variable to store the summary text
 
+  // Function that gets called when the user hovers over the wrapped text
   const handleMouseOver = async (e: React.MouseEvent<HTMLSpanElement>) => {
-    const selectedText = window.getSelection()?.toString();
+    const selectedText = window.getSelection()?.toString(); // Get the selected text from the user's browser window
     if (selectedText) {
       try {
         const response = await axios.post(
@@ -20,13 +22,13 @@ const SummaryTooltip: React.FC<TooltipProps> = ({ text, children }) => {
           },
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              Authorization: `Bearer ${localStorage.getItem('token')}`, // Add authentication token to the request headers
             },
           }
         );
-        setSummary(response.data);
+        setSummary(response.data); // Set the summary state variable with the response data from the server
       } catch (error) {
-        console.log(error);
+        console.log(error); // Log any errors that occur during the server request
       }
     }
   };

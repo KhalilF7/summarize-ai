@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
-import './style.css';
 import { Link, Navigate } from 'react-router-dom';
 
+import './style.css';
+
+/**
+ * Signup component.
+ * @returns JSX element containing the Signup form.
+ */
 const Signup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [redirect, setRedirect] = useState(false);
 
+  /**
+   * Handles form submit event.
+   * @param {Object} event - The event object.
+   */
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
@@ -27,8 +35,8 @@ const Signup = () => {
     }
   };
 
-  if(redirect){
-    return <Navigate replace to="/login" />
+  if (redirect) {
+    return <Navigate replace to="/login" />;
   }
 
   return (
@@ -67,11 +75,15 @@ const Signup = () => {
             className="form-control"
           />
         </div>
-        <button type="submit" className="btn btn-primary">Sign Up</button>
-      <div style={{ marginTop: '10px', textAlign: 'center' }}>
-        <span>Already have an account? </span>
-        <Link to="/login" style={{ textDecoration: 'underline' }}>Login</Link>
-      </div>
+        <button type="submit" className="btn btn-primary">
+          Sign Up
+        </button>
+        <div style={{ marginTop: '10px', textAlign: 'center' }}>
+          <span>Already have an account? </span>
+          <Link to="/login" style={{ textDecoration: 'underline' }}>
+            Login
+          </Link>
+        </div>
       </form>
     </div>
   );

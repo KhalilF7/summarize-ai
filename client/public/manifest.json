@@ -1,23 +1,57 @@
 {
-  "manifest_version": 3,
-  "name": "AI Summarize",
-  "description": "allowing users to highlight text and receive AI-generated summaries",
-  "version": "1.0.0",
-  "action": {
-      "default_popup": "index.html",
-      "default_title": "Open the popup"
-  },
-  "icons": {
-      "16": "/img/favicon/favicon-16x16.png",
-      "48": "/img/favicon/favicon-48x48.png",
-      "128": "/img/favicon/favicon-128x128.png"
-  },
-  "permissions": [
-      "scripting",
-      "activeTab",
-      "storage"
-  ],
-  "host_permissions": [
-      "https://*/"
-  ]
-}
+    "manifest_version": 3,
+    "name": "AI Summarize",
+    "description": "allowing users to highlight text and receive AI-generated summaries",
+    "version": "1.0.0",
+    "action": {
+        "default_popup": "index.html",
+        "default_title": "Open the popup"
+    },
+    "icons": {
+        "16": "/img/favicon/favicon-16x16.png",
+        "48": "/img/favicon/favicon-48x48.png",
+        "128": "/img/favicon/favicon-128x128.png"
+    },
+    "permissions": [
+        "scripting",
+        "activeTab",
+        "storage"
+    ],
+    "content_scripts": [
+      {
+        "matches": [
+          "<all_urls>"
+        ],
+        "css": ["/css/modules.css"],
+        "js": [
+          "/lib/jquery-2.1.3.min.js",
+          "/static/js/summaryToolTip.js",
+          "/static/js/contentScript.js"
+        ],
+        "all_frames": true
+      }
+    ],
+    "background": {
+      "service_worker": "/static/js/background.js",
+      "type": "module"
+    },
+    "commands": {
+      "toggle-highlighter-cursor": {
+          "description": "Toggle the highlighter cursor"
+      }
+    },
+    "host_permissions": [
+      "<all_urls>"
+    ],
+    "web_accessible_resources": [
+      {
+          "resources": [
+              "img/icons/*.png",
+              "img/svg/*.svg"
+          ],
+          "matches": [
+              "<all_urls>"
+          ]
+      }
+    ]
+  }

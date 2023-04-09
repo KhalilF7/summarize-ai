@@ -34,6 +34,7 @@
     "build-js": "react-scripts build",
     "build": "concurrently \"npm run build-css\" \"npm run build-js\"",
     "test": "node scripts/test.js",
+    "eject": "react-scripts eject",
     "concurrently": "concurrently"
   },
   "eslintConfig": {

@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import axios from 'axios';
 import { Link, Navigate } from 'react-router-dom';
-
-import './style.css';
+import { TokenContext } from '../App';
 
 /**
  * Login component that renders a form for logging in.
@@ -11,6 +10,7 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [redirect, setRedirect] = useState(false);
+  const { token, setToken } = useContext(TokenContext);
 
   /**
    * Event handler for changing the email input value.
@@ -41,8 +41,9 @@ function Login() {
         password,
       });
 
+      await localStorage.setItem('token', response.data.token); // store the token in local storage or state
+      setToken(response.data.token); // update the token in the TokenContext
       setRedirect(true);
-      localStorage.setItem('token', response.data.token); // store the token in local storage or state
     } catch (error) {
       console.log(error);
     }

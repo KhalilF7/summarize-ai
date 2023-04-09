@@ -1,21 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AiOutlinePoweroff } from 'react-icons/ai';
-import './style.css';
 import ExportButton from './ExportButton';
+import { TokenContext } from '../App';
 
 /**
  * Logout button component
  */
 function LogoutButton() {
   const navigate = useNavigate();
+  const { token, setToken } = useContext(TokenContext);
 
   /**
    * Function to handle the logout action
    */
   const handleLogout = () => {
     localStorage.removeItem('token');
+    setToken(null);
     navigate('/login');
     window.location.reload();
   };
@@ -32,13 +34,17 @@ function LogoutButton() {
  */
 function HighlightList() {
   const [highlights, setHighlights] = useState([{ text: '', summary: '', _id: '' }]);
-  const [isEnabled, setIsEnabled] = useState(true);
+  const { token, setToken, isEnabled, setIsEnabled } = useContext(TokenContext);
 
   /**
    * Function to toggle the button state
    */
   const handleClick = () => {
-    setIsEnabled(!isEnabled);
+    chrome.runtime.sendMessage({ action: 'toggle-highlighter-cursor' },  (response) =>{
+			if (chrome.runtime.lastError) console.error(chrome.runtime.lastError)
+		});
+    //window.close();
+      setIsEnabled(!isEnabled);
   };
   
   const buttonStyle = {
@@ -60,7 +66,7 @@ function HighlightList() {
     {
       responseType: 'blob',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${token}`,
       },
     });
   
@@ -81,7 +87,7 @@ function HighlightList() {
       const response = await axios.get('http://localhost:8000/summarize-ai/summaries',
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setHighlights(response.data);

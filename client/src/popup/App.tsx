@@ -1,34 +1,38 @@
 /*global chrome*/
-import React from 'react';
-import { Container } from '@material-ui/core';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
+import React, { useEffect, useState, createContext } from 'react';
+import { Container } from '@material-ui/core';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Login from './views/Login';
 import Signup from './views/Signup';
-import Summary from './views/Summary';
 import HighlightList from './views/HighlightList';
+
+export const TokenContext = createContext<{ token: string | null, setToken: (token: string | null) => void, isEnabled: boolean, setIsEnabled: (isEnabled: boolean) => void }>({ token: null, setToken: () => {}, isEnabled: true, setIsEnabled: () => {} });
 
 /**
  * The main app component that renders the routes for the app.
  */
-const App = () => (
-  <BrowserRouter>
-    <Container maxWidth="xs">
-      <Routes>
-        {/* Renders the summary view for the root path */}
-        <Route path="/" element={<Summary />} />
+function App () {
+  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [isEnabled, setIsEnabled] = useState(true);
+  return (
+    <HashRouter>
+      <TokenContext.Provider value={{ token, setToken, isEnabled, setIsEnabled }} >
+        <Container maxWidth="xs">
+          <Routes>
+            {/* Renders the highlight list view for the / path */}
+            <Route path="/" element={!token ? <Navigate to="/login" /> : <HighlightList />} />
 
-        {/* Renders the highlight list view for the /myhighlights path */}
-        <Route path="/myhighlights" element={<HighlightList />} />
+            {/* Renders the login view for the /login path */}
+            <Route path="/login" element={token ? <Navigate to="/" /> : <Login />} />
 
-        {/* Renders the login view for the /login path */}
-        <Route path="/login" element={<Login />} />
-
-        {/* Renders the signup view for the /signup path */}
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
-    </Container>
-  </BrowserRouter>
-);
+            {/* Renders the signup view for the /signup path */}
+            <Route path="/signup" element={token ? <Navigate to="/" /> : <Signup />} />
+          </Routes>
+        </Container>
+      </TokenContext.Provider>
+    </HashRouter>
+  );
+};
 
 export default App;

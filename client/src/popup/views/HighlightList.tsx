@@ -44,8 +44,8 @@ function HighlightList() {
     chrome.runtime.sendMessage({ action: 'toggle-highlighter-cursor' },  (response) =>{
 			if (chrome.runtime.lastError) console.error(chrome.runtime.lastError)
 		});
-    //window.close();
-      setIsDisabled(!isDisabled);
+    window.close();
+    setIsDisabled(!isDisabled);
   };
   
   const buttonStyle = {

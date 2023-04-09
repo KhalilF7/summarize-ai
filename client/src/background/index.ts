@@ -2,7 +2,8 @@ import {
     toggleHighlighterCursor,
     highlightText,
     tooltip,
-    retrieveSummary
+    retrieveSummary,
+    cursorState
   } from './actions/index';
   let token = '';
   chrome.runtime.onMessage.addListener( (request, _sender, sendResponse) => {
@@ -28,6 +29,9 @@ import {
         break;
       case 'updateToken':
         token =  request.text;
+        break;
+      case 'cursor-state':
+        cursorState();
         break;
       default:
         // Do nothing for unknown actions.

@@ -43,4 +43,10 @@ function toggle() {
   }
 }
 
-export { toggle, initializeHighlighterCursor };
+function updateState() {
+  chrome.runtime.sendMessage({ action: 'cursor-state-update', value: crayonCursor }, (response) => {
+    if(chrome.runtime.lastError) console.error(chrome.runtime.lastError);
+  });
+}
+
+export { toggle, initializeHighlighterCursor, updateState };

@@ -34,7 +34,7 @@ function LogoutButton() {
  */
 function HighlightList() {
   const [highlights, setHighlights] = useState([{ text: '', summary: '', _id: '' }]);
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
   const { token, setToken } = useContext(TokenContext);
 
   /**
@@ -45,11 +45,11 @@ function HighlightList() {
 			if (chrome.runtime.lastError) console.error(chrome.runtime.lastError)
 		});
     //window.close();
-      setIsEnabled(!isEnabled);
+      setIsDisabled(!isDisabled);
   };
   
   const buttonStyle = {
-    backgroundColor: isEnabled ? 'green' : 'red',
+    backgroundColor: isDisabled ? 'red' : 'green',
     color: 'white',
     padding: '10px 20px',
     border: 'none',
@@ -95,13 +95,27 @@ function HighlightList() {
     }
     fetchData();
     chrome.runtime.sendMessage({ action: 'updateToken', text: token });
+
+    chrome.runtime.onMessage.addListener( (request, _sender, sendResponse) => {
+      const { action } = request;
+      if(request.action === "cursor-state-update"){
+        let data = request.value;
+        setIsDisabled(data);
+      }
+      return true;
+    })
+    chrome.runtime.sendMessage({ action: 'cursor-state' },  (response) =>{
+  
+      if (chrome.runtime.lastError) console.error(chrome.runtime.lastError)
+    
+    });
   }, []);
 
   return (
     <div>
       <div className="header">
         <button style={buttonStyle} onClick={handleClick}>
-          {isEnabled ? 'Enable' : 'Disable'}
+          {isDisabled ? 'Disable' : 'Enable'}
         </button>
         <ExportButton onExport={handleExport} />
         <LogoutButton />

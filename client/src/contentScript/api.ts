@@ -1,8 +1,9 @@
-import { toggle } from './actions/cursor';
+import { toggle, updateState } from './actions/cursor';
 import { highlight } from './actions/highlight';
 
 
 export {
   toggle,
-  highlight
+  highlight,
+  updateState
 };

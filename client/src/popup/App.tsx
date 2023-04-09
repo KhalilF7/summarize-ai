@@ -1,7 +1,7 @@
 /*global chrome*/
 
 import React, { useEffect, useState, createContext } from 'react';
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Login from './views/Login';
 import Signup from './views/Signup';

@@ -4,6 +4,8 @@ import { GetAiModelSummary } from './model/get-ai-model-summary';
 import { Summary } from './schemas/summary.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import * as fs from 'fs';
+import * as pdf from 'pdfkit';
 
 const DEFAULT_MODEL_ID = "text-davinci-003";
 const DEFAULT_TEMPERATURE = 0.9;
@@ -85,5 +87,42 @@ export class SummarizeAiService {
 
     async listSummaries(userId: string): Promise<Summary[]> {
         return this.summaryModel.find({ user: userId }).exec();
+    }
+
+    async exportPDF(summaries: { text: string, summary: string }[]) {
+        const PDFDocument = require('pdfkit');
+        const doc = new PDFDocument();
+        
+        doc.fontSize(16).text('List of Summaries');
+        
+        doc.moveDown();
+        
+        // Create table header
+        doc.fontSize(12).text('Text', { width: 250, continued: true }).text('Summary', { width: 250 });
+        
+        // Create table rows
+        summaries.forEach(summary => {
+          doc.moveDown();
+          doc.fontSize(10).text(summary.text, { width: 250, continued: true }).text(summary.summary, { width: 250 });
+        });
+        
+        doc.end();
+        
+        return new Promise<Buffer>((resolve, reject) => {
+          const buffers: any[] = [];
+          doc.on('data', buffers.push.bind(buffers));
+          doc.on('end', () => {
+            const pdfBuffer = Buffer.concat(buffers);
+            resolve(pdfBuffer);
+          });
+          doc.on('error', reject);
+        });
       }
+
+    async exportCSV(summaries: { text: string, summary: string }[]): Promise<string> {
+        const header = 'Highlighted Text,Ai Summary';
+        const rows = summaries.map(({ text, summary }) => `"${text}","${summary}"`).join('\n');
+        return `${header}\n${rows}`;
+    }
+
 }

@@ -1,10 +1,11 @@
 import {
     toggleHighlighterCursor,
     highlightText,
-    tooltip
+    tooltip,
+    retrieveSummary
   } from './actions/index';
-  
-  chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+  let token = '';
+  chrome.runtime.onMessage.addListener( (request, _sender, sendResponse) => {
     const { action } = request;
   
     // Use a switch statement to handle different actions.
@@ -20,6 +21,13 @@ import {
       case 'selectedText':
         // Call the tooltip function with the text parameter for the 'selectedText' action.
         tooltip(request.text);
+        break;
+      case 'summaryAPI':
+        // Call the tooltip function with the text parameter for the 'selectedText' action.
+        const summary =  retrieveSummary(request.text,sendResponse, token);
+        break;
+      case 'updateToken':
+        token =  request.text;
         break;
       default:
         // Do nothing for unknown actions.

@@ -7,17 +7,16 @@ import Login from './views/Login';
 import Signup from './views/Signup';
 import HighlightList from './views/HighlightList';
 
-export const TokenContext = createContext<{ token: string | null, setToken: (token: string | null) => void, isEnabled: boolean, setIsEnabled: (isEnabled: boolean) => void }>({ token: null, setToken: () => {}, isEnabled: true, setIsEnabled: () => {} });
+export const TokenContext = createContext<{ token: string | null, setToken: (token: string | null) => void }>({ token: null, setToken: () => {} });
 
 /**
  * The main app component that renders the routes for the app.
  */
 function App () {
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [token, setToken] = useState(localStorage.getItem('token'))
   return (
     <HashRouter>
-      <TokenContext.Provider value={{ token, setToken, isEnabled, setIsEnabled }} >
+      <TokenContext.Provider value={{ token, setToken }} >
         <Container maxWidth="xs">
           <Routes>
             {/* Renders the highlight list view for the / path */}

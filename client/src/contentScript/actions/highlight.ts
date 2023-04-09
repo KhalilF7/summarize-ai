@@ -37,55 +37,25 @@ let timeoutId: number | null = null;
       clearTimeout(timeoutId);
       timeoutId = null;
   }
-
-      // timeoutId = +setTimeout(async () => {
-    //   try {
-    //     // Retrieve the token from storage
-    //     const token = await new Promise<string>((resolve, reject) => {
-    //       chrome.storage.local.get('token', (result) => {
-    //         if (chrome.runtime.lastError) {
-    //           reject(chrome.runtime.lastError);
-    //         } else {
-    //           resolve(result.token);
-    //         }
-    //       });
-    //     });
-        
-    //     // Call API and wait for the result
-    //     const result = await fetch('https://example.com/api', {
-    //       method: 'POST',
-    //       body: JSON.stringify({ selectionString }),
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${token}`
-    //       }
-    //     });
-        
-    //     // Extract the result as text
-    //     const textResult = await result.text();
-  
-    //     // Send the message with the result
-    //     chrome.runtime.sendMessage({
-    //       action: "selectedText",
-    //       text: textResult
-    //     });
-    //   } catch (error) {
-    //     console.error(error);
-    //   } finally {
-    //     timeoutId = null;
-    //   }
-    // }, 100);
-
-
-  timeoutId = +setTimeout(() => {
-      chrome.runtime.sendMessage({
+  chrome.runtime.sendMessage({ action:"summaryAPI", text: selectionString },(response)=>{
+    if (chrome.runtime.lastError) console.error(chrome.runtime.lastError)
+    console.log(response)
+    timeoutId = +setTimeout(async () => {
+      try {
+        // Send the message with the summary text
+        chrome.runtime.sendMessage({
           action: "selectedText",
-          text: selectionString
-      }, function (response) {
-        if (chrome.runtime.lastError) console.error(chrome.runtime.lastError)
-    });
-      timeoutId = null;
-  }, 5000);
+          text: response.summary
+        }, function (resp) {
+          if (chrome.runtime.lastError) console.error(chrome.runtime.lastError)
+      });
+      } catch (error) {
+        console.error(error);
+      } finally {
+        timeoutId = null;
+      }
+    }, 100);
+  });
 }
 
   

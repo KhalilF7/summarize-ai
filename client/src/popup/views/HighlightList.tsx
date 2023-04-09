@@ -34,7 +34,8 @@ function LogoutButton() {
  */
 function HighlightList() {
   const [highlights, setHighlights] = useState([{ text: '', summary: '', _id: '' }]);
-  const { token, setToken, isEnabled, setIsEnabled } = useContext(TokenContext);
+  const [isEnabled, setIsEnabled] = useState(true);
+  const { token, setToken } = useContext(TokenContext);
 
   /**
    * Function to toggle the button state
@@ -93,6 +94,7 @@ function HighlightList() {
       setHighlights(response.data);
     }
     fetchData();
+    chrome.runtime.sendMessage({ action: 'updateToken', text: token });
   }, []);
 
   return (

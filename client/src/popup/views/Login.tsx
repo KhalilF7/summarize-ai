@@ -43,6 +43,7 @@ function Login() {
 
       await localStorage.setItem('token', response.data.token); // store the token in local storage or state
       setToken(response.data.token); // update the token in the TokenContext
+      chrome.runtime.sendMessage({ action: 'updateToken', text: response.data.token });
       setRedirect(true);
     } catch (error) {
       console.log(error);
